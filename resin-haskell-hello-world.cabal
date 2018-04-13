@@ -1,0 +1,20 @@
+name:                resin-haskell-hello-world
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/resin-io-projects/resin-haskell-hello-world
+license:             BSD3
+license-file:        LICENSE
+author:              Giovanni Garufi
+maintainer:          giovanni@resin.io
+copyright:           2018 Giovanni Garufi
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+executable resin-haskell-hello-world
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5

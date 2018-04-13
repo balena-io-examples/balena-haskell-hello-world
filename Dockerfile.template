@@ -1,0 +1,19 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-debian:stretch
+
+ENV INITSYSTEM on
+
+# note: stackage resolver version should correspond to ghc version
+ARG ghc_version=8.0.1-17+rpi1
+ARG resolver_version=lts-7.24
+
+RUN apt-get -q update && apt-get install -yq --no-install-recommends \
+	ghc=$ghc_version cabal-install haskell-stack netbase ca-certificates git \
+	&& apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+
+RUN stack setup && stack build
+
+CMD stack exec resin-haskell-hello-world
