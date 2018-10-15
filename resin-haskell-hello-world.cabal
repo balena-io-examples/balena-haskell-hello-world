@@ -2,7 +2,7 @@ name:                resin-haskell-hello-world
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/resin-io-projects/resin-haskell-hello-world
+homepage:            https://github.com/balena-projects/balena-haskell-hello-world
 license:             BSD3
 license-file:        LICENSE
 author:              Giovanni Garufi
