@@ -6,7 +6,7 @@ homepage:            https://github.com/balena-projects/balena-haskell-hello-wor
 license:             BSD3
 license-file:        LICENSE
 author:              Giovanni Garufi
-maintainer:          giovanni@resin.io
+maintainer:          giovanni@balena.io
 copyright:           2018 Giovanni Garufi
 category:            Web
 build-type:          Simple

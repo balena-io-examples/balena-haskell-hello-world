@@ -10,7 +10,7 @@ $ git clone git@github.com:balena-projects/balena-haskell-hello-world.git
 ```
 Then add your balena application's remote repository to your local repository:
 ```
-$ git remote add balena username@git.balena.io:username/myapp.git
+$ git remote add balena username@git.balena-cloud.com:username/myapp.git
 ```
 and push the code to the newly added remote:
 ```
@@ -26,5 +26,5 @@ Stack is set to resolve against `lts-7.24` which matches the installed GHC versi
 [balena-link]:https://balena.io/
 [stack-link]:https://docs.haskellstack.org/en/stable/README/
 [ghc-link]:https://www.haskell.org/ghc/
-[signup-page]:https://dashboard.balena.io/signup
-[gettingStarted-link]:http://docs.balena.io/#/pages/installing/gettingStarted.md
+[signup-page]:https://dashboard.balena-cloud.com/signup
+[gettingStarted-link]:http://balena.io/docs/learn/getting-started
