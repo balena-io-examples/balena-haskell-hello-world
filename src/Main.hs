@@ -1,5 +1,17 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
+import Snap.Core
+import Snap.Http.Server
+import Snap.Util.FileServe
+
+site :: Snap ()
+site = route
+    [ 
+      ("/", serveFile "views/index.html"),
+      ("/public", serveDirectory "views/public")
+    ]
+
 main :: IO ()
-main = do
-  putStrLn "Hello, World!"
+main = quickHttpServe site

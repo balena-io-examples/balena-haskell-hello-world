@@ -1,18 +1,50 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-debian:stretch
+# FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:latest-build as build
+FROM arm64v8/haskell:8.10 as build
 
-ENV INITSYSTEM on
+WORKDIR /usr/src/balena-haskell-hello-world
+SHELL ["/bin/bash", "-c"] 
 
-# note: stackage resolver version should correspond to ghc version
-ARG ghc_version=8.0.1-17+rpi1
+# install ghcup
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
 
-RUN apt-get -q update && apt-get install -yq --no-install-recommends \
-	ghc=$ghc_version cabal-install haskell-stack netbase ca-certificates git \
-	&& apt-get clean && rm -rf /var/lib/apt/lists/*
+# ARG GHC=8.6.5
+# ARG CABAL=latest
 
-WORKDIR /usr/src/app
+# # Add ghcup to PATH
+# ENV PATH=${PATH}:/root/.local/bin
+# ENV PATH=${PATH}:/root/.ghcup/bin
 
-COPY . /usr/src/app
+# # install GHC and cabal
+# RUN \
+# 	ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
+# 	ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
 
-RUN stack setup && stack build
+# Update Path to include Cabal and GHC exports
+# RUN bash -c "echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc"
+# RUN bash -c "echo export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" >> $HOME/.bashrc"
+# RUN bash -c "source $HOME/.bashrc"
 
-CMD stack exec resin-haskell-hello-world
+RUN cabal update && cabal install cabal-install && cabal user-config update
+
+# Add just the .cabal file to capture dependencies
+COPY *.cabal ./
+
+# Docker will cache this command as a layer, freeing us up to
+# modify source code without re-installing dependencies
+# (unless the .cabal file changes!)
+RUN cabal build --only-dependencies -j4
+
+# Add and Install Application Code
+COPY src/ src/
+
+RUN cabal install
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:latest-run 
+
+WORKDIR /usr/src/balena-haskell-hello-world
+
+COPY --from=build /usr/src/balena-haskell-hello-world/src/ src/
+COPY views/ views/
+
+# CMD [ "./src/Main" ] 
+CMD [ "tail", "-f", "/dev/null" ] 
