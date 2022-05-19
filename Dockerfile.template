@@ -1,49 +1,51 @@
-# FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:latest-build as build
-FROM arm64v8/haskell:8.10 as build
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-build as build
 
 WORKDIR /usr/src/balena-haskell-hello-world
 SHELL ["/bin/bash", "-c"] 
 
 # install ghcup
-# RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
 
-# ARG GHC=8.6.5
-# ARG CABAL=latest
+ARG GHC=8.10.7
+ARG stack=2.7.5
 
 # # Add ghcup to PATH
-# ENV PATH=${PATH}:/root/.local/bin
-# ENV PATH=${PATH}:/root/.ghcup/bin
+ENV PATH=${PATH}:/root/.local/bin
+ENV PATH=${PATH}:/root/.ghcup/bin
+ENV PATH=${PATH}:/usr/src/balena-haskell-hello-world/bin/
 
 # # install GHC and cabal
-# RUN \
-# 	ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
-# 	ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
+RUN \
+	install_packages llvm libnuma-dev && \
+	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
+	ghcup install stack ${stack} && ghcup set stack ${stack} 
 
-# Update Path to include Cabal and GHC exports
-# RUN bash -c "echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc"
-# RUN bash -c "echo export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" >> $HOME/.bashrc"
-# RUN bash -c "source $HOME/.bashrc"
+COPY log/ log/
+COPY *.cabal . 
+COPY *.yaml . 
 
-RUN cabal update && cabal install cabal-install && cabal user-config update
+RUN stack build --only-dependencies
 
-# Add just the .cabal file to capture dependencies
-COPY *.cabal ./
-
-# Docker will cache this command as a layer, freeing us up to
-# modify source code without re-installing dependencies
-# (unless the .cabal file changes!)
-RUN cabal build --only-dependencies -j4
-
-# Add and Install Application Code
+# COPY .ghci . 
 COPY src/ src/
+COPY views/ views/
 
-RUN cabal install
+# RUN install_packages cabal-install file llvm && cabal update && cabal install cabal-install && cabal user-config update 
+RUN stack install --copy-bins
+# RUN bash -c "echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc"
+# RUN install_packages haskell-stack
+# CMD [ "balena-haskell-hello-world", "-p", "80" ] 
+# RUN file ~/.local/bin/balena-haskell-hello-world
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:latest-run 
+# RUN cabal build --only-dependencies -j4
+# Add and Install Application Code
+# RUN cabal install
 
-WORKDIR /usr/src/balena-haskell-hello-world
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-run 
 
-COPY --from=build /usr/src/balena-haskell-hello-world/src/ src/
+WORKDIR /usr/
+
+COPY --from=build /usr/src/balena-haskell-hello-world/bin/ src/
 COPY views/ views/
 
 # CMD [ "./src/Main" ] 

@@ -10,7 +10,7 @@ site :: Snap ()
 site = route
     [ 
       ("/", serveFile "views/index.html"),
-      ("/public", serveDirectory "views/public")
+      ("/public",  serveDirectoryWith fancyDirectoryConfig  "views/public")
     ]
 
 main :: IO ()
