@@ -9,12 +9,12 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTR
 ARG GHC=8.10.7
 ARG stack=2.7.5
 
-# # Add ghcup to PATH
+# Add ghcup to PATH
 ENV PATH=${PATH}:/root/.local/bin
 ENV PATH=${PATH}:/root/.ghcup/bin
-ENV PATH=${PATH}:/usr/src/balena-haskell-hello-world/bin/
+# ENV PATH=${PATH}:/usr/src/balena-haskell-hello-world/bin/
 
-# # install GHC and cabal
+# install GHC and cabal
 RUN \
 	install_packages llvm libnuma-dev && \
 	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
@@ -30,22 +30,14 @@ RUN stack build --only-dependencies
 COPY src/ src/
 COPY views/ views/
 
-# RUN install_packages cabal-install file llvm && cabal update && cabal install cabal-install && cabal user-config update 
 RUN stack install --copy-bins
-# RUN bash -c "echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc"
-# RUN install_packages haskell-stack
 # CMD [ "balena-haskell-hello-world", "-p", "80" ] 
-# RUN file ~/.local/bin/balena-haskell-hello-world
-
-# RUN cabal build --only-dependencies -j4
-# Add and Install Application Code
-# RUN cabal install
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-run 
 
 WORKDIR /usr/
 
-COPY --from=build /usr/src/balena-haskell-hello-world/bin/ src/
+COPY --from=build /root/.local/bin/balena-haskell-hello-world src/
 COPY views/ views/
 
 # CMD [ "./src/Main" ] 
