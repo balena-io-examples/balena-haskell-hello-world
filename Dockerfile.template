@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-build as build
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-build as build
 
 WORKDIR /usr/src/balena-haskell-hello-world
 SHELL ["/bin/bash", "-c"] 
@@ -16,20 +16,21 @@ ARG stack=2.7.5
 
 # install GHC and cabal
 RUN \
-	install_packages llvm libnuma-dev && \
+	install_packages llvm libnuma-dev libgmp3-dev && \
 	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
 	ghcup install stack ${stack} && ghcup set stack ${stack} 
 
-COPY log/ *.cabal *.yaml ./
+COPY log ./log
+COPY *.cabal *.yaml ./
 
 # Install dependencies for the stack project
 RUN stack build --only-dependencies
 
-COPY src/ src/ .ghci ./
+COPY src ./src
 
 RUN stack install --copy-bins
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-run 
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-run 
 
 WORKDIR /usr/
 
