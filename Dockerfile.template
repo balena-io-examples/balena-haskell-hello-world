@@ -20,7 +20,6 @@ RUN \
 	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
 	ghcup install stack ${stack} && ghcup set stack ${stack} 
 
-COPY log ./log
 COPY *.cabal *.yaml ./
 
 # Install dependencies for the stack project
@@ -34,9 +33,8 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-run
 
 WORKDIR /usr/
 
-COPY --from=build /root/.local/bin/balena-haskell-hello-world src/
-COPY views/ views/
+COPY --from=build /root/.local/bin/balena-haskell-hello-world ./
+COPY log ./log
+COPY views ./views
 
-# CMD [ "./src/Main" ] 
-# CMD [ "balena-haskell-hello-world", "-p", "80" ] 
-CMD [ "tail", "-f", "/dev/null" ] 
+CMD [ "./balena-haskell-hello-world", "-p", "80" ] 
