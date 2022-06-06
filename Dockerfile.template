@@ -1,18 +1,40 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-debian:stretch
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-build as build
 
-ENV INITSYSTEM on
+WORKDIR /usr/src/balena-haskell-hello-world
+SHELL ["/bin/bash", "-c"] 
 
-# note: stackage resolver version should correspond to ghc version
-ARG ghc_version=8.0.1-17+rpi1
+# install ghcup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
 
-RUN apt-get -q update && apt-get install -yq --no-install-recommends \
-	ghc=$ghc_version cabal-install haskell-stack netbase ca-certificates git \
-	&& apt-get clean && rm -rf /var/lib/apt/lists/*
+# Add ghcup to PATH
+ENV PATH=${PATH}:/root/.local/bin
+ENV PATH=${PATH}:/root/.ghcup/bin
 
-WORKDIR /usr/src/app
+# GHC and Stack versions to install
+ARG GHC=8.10.7
+ARG stack=2.7.5
 
-COPY . /usr/src/app
+# install GHC and cabal
+RUN \
+	install_packages llvm libnuma-dev libgmp3-dev && \
+	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
+	ghcup install stack ${stack} && ghcup set stack ${stack} 
 
-RUN stack setup && stack build
+COPY *.cabal *.yaml ./
 
-CMD stack exec resin-haskell-hello-world
+# Install dependencies for the stack project
+RUN stack build --only-dependencies
+
+COPY src ./src
+
+RUN stack install --copy-bins
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-run 
+
+WORKDIR /usr/
+
+COPY --from=build /root/.local/bin/balena-haskell-hello-world ./
+COPY log ./log
+COPY views ./views
+
+CMD [ "./balena-haskell-hello-world", "-p", "80" ] 
