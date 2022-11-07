@@ -6,7 +6,7 @@ Maintainer:          vipul@balena.io
 Stability:           Experimental
 Category:            Web
 Build-type:          Simple
-Cabal-version:       >=1.2
+Cabal-version:       >=1.8
 
 Executable balena-haskell-hello-world
   hs-source-dirs: src
