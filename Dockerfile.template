@@ -3,22 +3,29 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-build as build
 WORKDIR /usr/src/balena-haskell-hello-world
 SHELL ["/bin/bash", "-c"] 
 
-# install ghcup
-RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
+# Install ghcup using the official instructions
+#RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
+#
+# Alas, the installer script runs `ghcup update` regardless of the parameters we supply,
+# so we can't pin to a known good version (and 0.1.18.0 is known bad:
+# https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/405 ).
+# But the download logic is too good to give up, so we've included the version of the
+# script at the revision before 0.1.18.0, and then strip the upgrade command out of it here:
+COPY bootstrap-haskell-60299b6b ./
+RUN grep -vw 'eghcup upgrade' bootstrap-haskell-60299b6b \
+			| BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_MINIMAL=1 bash
 
-# Add ghcup to PATH
-ENV PATH=${PATH}:/root/.local/bin
+# Add ghcup bin PATH explicitly, to avoid `source /root/.ghcup/env` before every command.
 ENV PATH=${PATH}:/root/.ghcup/bin
 
-# GHC and Stack versions to install
-ARG GHC=8.10.7
-ARG stack=2.7.5
+# Install prerequisites
+RUN install_packages llvm libnuma-dev libgmp3-dev
 
-# install GHC and cabal
-RUN \
-	install_packages llvm libnuma-dev libgmp3-dev && \
-	ghcup install ghc ${GHC} && ghcup set ghc ${GHC} && \
-	ghcup install stack ${stack} && ghcup set stack ${stack} 
+# install GHC and stack
+ARG GHC_VER=8.10.7
+ARG STACK_VER=2.7.5
+RUN ghcup install ghc ${GHC_VER} && ghcup set ghc ${GHC_VER} && \
+		ghcup install stack ${STACK_VER} && ghcup set stack ${STACK_VER} 
 
 COPY *.cabal *.yaml ./
 
@@ -27,7 +34,7 @@ RUN stack build --only-dependencies
 
 COPY src ./src
 
-RUN stack install --copy-bins
+RUN stack install
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-run 
 
