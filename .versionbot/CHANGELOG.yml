@@ -1,0 +1,173 @@
+- commits:
+    - subject: "patch: replace balenaCI with flowzone"
+      hash: cfd45939bbac86a63f11c5825d6d95a32e1f8840
+      body: ""
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 1.0.3
+  title: ""
+  date: 2022-11-07T12:03:31.747Z
+- version: 1.0.2
+  date: 2022-11-07T11:27:15Z
+  commits:
+    - hash: c675daf714773b94923fec805c8b34525312cfaf
+      author: Heath Raftery
+      footers:
+        change-type: patch
+        signed-off-by: Heath Raftery (@hraftery) <heath.raftery@balena.io>
+      subject: Keep bit rot at bay.
+      body: >-
+        - Pinned ghcup to version 0.1.17.8 since by default it auto-updates and
+        0.1.18.0 is broken on ARM:
+        https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/405
+
+        - Investigated complex "fdlock: invalid argument" bug (https://github.com/commercialhaskell/stack/issues/5589) but couldn't reliably eliminate it. Updating to stack 2.9.1 may help, but seems to be okay now with the original 2.7.5 so leaving it be.
+
+        - Made reason for ENV commands for ghcup more explicit for future maintainers.
+
+        - Split prerequisite installs from ghcup installs for better caching and easier maintenance.
+
+        - Renamed ARGs for more self-documentation, and moved them closer to where they're used since they're applied at each RUN and therefore affect caching.
+
+        - Removed redundant `--copy-bins` flag.
+
+        - Removed stack.yaml.lock because it's not used and at the moment does not provide any useful locking.
+
+        - Changed "Cabal-version" requirement to >=1.8 from >1.2 to remove warning about unsupported version range syntax feature, since we have no reason to support the very outdated <1.8.
+- version: 1.0.1
+- date: 2022-06-13T11:23:06Z
+- commits:
+    - hash: 9a666763d235f8c965678bcc1ae7c3e88b9cd237
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: "patch: Convert balenaHub fleet to app"
+- commits:
+    - body: null
+- commits:
+    - hash: e574f10141ffc9ce8b9d996baf5dff8fb9e06611
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: "patch: Add logo to balenaHub"
+- commits:
+    - body: null
+- version: 1.0.0
+- date: 2022-06-06T13:59:50Z
+- commits:
+    - hash: 196c23d4bf2db81a7788ac11f9c9f1cef0dc0ccb
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: "major: Upgrade Getting Started experience for Haskell"
+- commits:
+    - body: null
+- commits:
+    - hash: 80773594713fa37fe0cb6282b7ff2066c731b43e
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Use Stack instead of Cabal to build
+- commits:
+    - body: null
+- commits:
+    - hash: 1d2ea82802b0b0a51f554b48e5443516123d7741
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Update server readmen
+- commits:
+    - body: null
+- commits:
+    - hash: 464f9b76f768f60fbd363f4974635a88fd7ccb2e
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Update .gitignore
+- commits:
+    - body: null
+- commits:
+    - hash: 39df12594bb65e35ce5d3cd89b6e0e8d3f5a8ca4
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Remove dead template code
+- commits:
+    - body: null
+- commits:
+    - hash: fdcc655add3525838c769e164bc5438ff17f48ef
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Update license to Apache 2.0
+- commits:
+    - body: null
+- commits:
+    - hash: c894fc82264f749df889ece33955de7bb96f0047
+- commits:
+    - author: Heath Raftery
+- commits:
+    - footers:
+        signed-off-by: Heath Raftery (@hraftery) <heath.raftery@balena.io>
+- commits:
+    - subject: Fix build for Raspberry Pi 2.
+- commits:
+    - body: |-
+        Changed from buster to bullseye to get correct llvm version.
+        Added install of libgmp3-dev dependency.
+        Fixed COPY commands for directories (must specify dst directory name).
+- commits:
+    - hash: 8a18a1d3671f1a600f835b1ab5db96b75e09bd4e
+- commits:
+    - author: Heath Raftery
+- commits:
+    - footers:
+        signed-off-by: Heath Raftery (@hraftery) <heath.raftery@balena.io>
+- commits:
+    - subject: Correct paths in run image.
+- commits:
+    - body: >-
+        Put log directory on run image instead of build image since it is required
+        at runtime.
+
+        Put executable in WORKDIR instead of src subdirectory so it can find log and views.
+
+        Restore the CMD that runs the server.
+- commits:
+    - hash: 578cdd9cc5823ea76b785bacd01bbbcbf19dc1ca
+- commits:
+    - author: Vipul Gupta (@vipulgupta2048)
+- commits:
+    - footers:
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+- commits:
+    - subject: Add README and balena.yml
+- commits:
+    - body: null
