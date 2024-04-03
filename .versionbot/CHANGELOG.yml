@@ -1,4 +1,14 @@
 - commits:
+    - subject: "patch: Add support for external contributors"
+      hash: 48fdf148ac00ba7bdd137d269f5ecbe328ec1d3c
+      body: ""
+      footer: {}
+      author: Vipul Gupta
+      nested: []
+  version: 1.0.4
+  title: ""
+  date: 2024-04-03T06:24:29.023Z
+- commits:
     - subject: "patch: replace balenaCI with flowzone"
       hash: cfd45939bbac86a63f11c5825d6d95a32e1f8840
       body: ""
@@ -24,19 +34,29 @@
         0.1.18.0 is broken on ARM:
         https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/405
 
-        - Investigated complex "fdlock: invalid argument" bug (https://github.com/commercialhaskell/stack/issues/5589) but couldn't reliably eliminate it. Updating to stack 2.9.1 may help, but seems to be okay now with the original 2.7.5 so leaving it be.
+        - Investigated complex "fdlock: invalid argument" bug
+        (https://github.com/commercialhaskell/stack/issues/5589) but couldn't
+        reliably eliminate it. Updating to stack 2.9.1 may help, but seems to be
+        okay now with the original 2.7.5 so leaving it be.
 
-        - Made reason for ENV commands for ghcup more explicit for future maintainers.
+        - Made reason for ENV commands for ghcup more explicit for future
+        maintainers.
 
-        - Split prerequisite installs from ghcup installs for better caching and easier maintenance.
+        - Split prerequisite installs from ghcup installs for better caching and
+        easier maintenance.
 
-        - Renamed ARGs for more self-documentation, and moved them closer to where they're used since they're applied at each RUN and therefore affect caching.
+        - Renamed ARGs for more self-documentation, and moved them closer to
+        where they're used since they're applied at each RUN and therefore
+        affect caching.
 
         - Removed redundant `--copy-bins` flag.
 
-        - Removed stack.yaml.lock because it's not used and at the moment does not provide any useful locking.
+        - Removed stack.yaml.lock because it's not used and at the moment does
+        not provide any useful locking.
 
-        - Changed "Cabal-version" requirement to >=1.8 from >1.2 to remove warning about unsupported version range syntax feature, since we have no reason to support the very outdated <1.8.
+        - Changed "Cabal-version" requirement to >=1.8 from >1.2 to remove
+        warning about unsupported version range syntax feature, since we have no
+        reason to support the very outdated <1.8.
 - version: 1.0.1
 - date: 2022-06-13T11:23:06Z
 - commits:
@@ -154,10 +174,11 @@
     - subject: Correct paths in run image.
 - commits:
     - body: >-
-        Put log directory on run image instead of build image since it is required
-        at runtime.
+        Put log directory on run image instead of build image since it is
+        required at runtime.
 
-        Put executable in WORKDIR instead of src subdirectory so it can find log and views.
+        Put executable in WORKDIR instead of src subdirectory so it can find log
+        and views.
 
         Restore the CMD that runs the server.
 - commits:
