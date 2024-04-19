@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-build as build
+FROM balenalib/%%BALENA_ARCH%%-debian:latest-build as build
 
 WORKDIR /usr/src/balena-haskell-hello-world
 SHELL ["/bin/bash", "-c"] 
@@ -36,7 +36,7 @@ COPY src ./src
 
 RUN stack install
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:bullseye-run 
+FROM balenalib/%%BALENA_ARCH%%-debian:latest-run 
 
 WORKDIR /usr/
 
