@@ -1,5 +1,7 @@
 # A Simple Server with Haskell Snap
 
+> This project has been deprecated and is no longer being maintained.
+
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/balena-io-examples/balena-haskell-hello-world)
 
 This is a simple skeleton Haskell server project that works on any of the [devices supported][devices-supported] by [balena][balena-link].
