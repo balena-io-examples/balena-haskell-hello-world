@@ -1,4 +1,16 @@
 - commits:
+    - subject: "patch: Unpublish Haskell from balenaHub"
+      hash: f7aadaa57134755bbd01ef7b1cb70cf01348ee99
+      body: ""
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipulgupta2048@gmail.com>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipulgupta2048@gmail.com>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 1.0.6
+  title: ""
+  date: 2025-04-28T17:24:12.966Z
+- commits:
     - subject: "patch: Update base image"
       hash: f6bf58e0a2b8b7cd9e29e6c0e39f6ed16a2c1ec7
       body: ""
